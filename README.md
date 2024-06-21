@@ -8,3 +8,6 @@ Page developed to study React
 
 ### 2. Styled Components:
 - Learning the styled component approach to style projects.
+
+### 3. Prop Drilling:
+- Study about prop drilling pros and cons and how to implement it.
