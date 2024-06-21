@@ -32,6 +32,22 @@ const ConteudoGaleria = styled.section`
 function App() {
   const [fotosDaGaleria, setFotosDaGaleria] = useState(fotos);
   const [fotoSelecionada, setFotoSelecionada] = useState(null);
+  
+  const aoAlternarFavorito = (foto) => {
+    //transforma o array de fotos em outra coisa, retornando a foto da galeria como um novo objeto com a foto escolhida e cria uma nova propriedade chamada favorita, compara se o id de favorito é o mesmo do id e então atribui o oposto do que ela tem (se é favorita, desfavorita), se não é o que queremos, deixa como está
+    setFotosDaGaleria(fotosDaGaleria.map(fotoDaGaleria => {
+      if (foto.id === fotoSelecionada?.id){
+        setFotoSelecionada({
+          ...fotoSelecionada,
+          favorita: !fotoSelecionada.favorita
+        })
+      }
+      return {
+        ...fotoDaGaleria,
+        favorita: fotoDaGaleria.id === foto.id ? !foto.favorita : fotoDaGaleria.favorita
+      }
+    }))
+  }
   return (
     <FundoGradiente>
       <EstilosGlobais />
@@ -46,11 +62,15 @@ function App() {
               />
               <Galeria 
                 aoFotoSelecionada={foto => setFotoSelecionada(foto)} 
+                aoAlternarFavorito={aoAlternarFavorito}
                 fotos={fotosDaGaleria}/>
             </ConteudoGaleria>           
           </MainContainer>       
       </AppContainer>
-      <ModalZoom foto={fotoSelecionada} aoFechar={() => setFotoSelecionada(null)}/>     
+      <ModalZoom 
+        foto={fotoSelecionada} 
+        aoFechar={() => setFotoSelecionada(null)}
+        aoAlternarFavorito={aoAlternarFavorito}/>     
     </FundoGradiente>
   )
 }
