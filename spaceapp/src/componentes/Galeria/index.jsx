@@ -33,7 +33,7 @@ const Galeria = ({fotos = [], aoFotoSelecionada }) => {
                         }
                     </ImagensContainer>
                 </SecaoFluida>
-                <Populares />
+                <Populares> </Populares>
             </GaleriaContainer>
         </>
     )
