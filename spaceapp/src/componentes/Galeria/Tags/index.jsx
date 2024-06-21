@@ -27,10 +27,10 @@ const BotaoEstilizado = styled.button`
     }
 `
 
-const Tags = () => {
+const Tags = ({ setTag }) => {
     return <TagsEstilizadas>
         <p>Busque por tags:</p>
-        {tags.map(tag => <BotaoEstilizado key={tag.id}>{tag.titulo} </BotaoEstilizado>)}
+        {tags.map(tag => <BotaoEstilizado key={tag.id} onClick={() => setTag(tag.tag)}>{tag.titulo} </BotaoEstilizado>)}
     </TagsEstilizadas>
 }
 

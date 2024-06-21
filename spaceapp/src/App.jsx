@@ -1,4 +1,6 @@
 import { styled } from "styled-components"
+import { useEffect, useState } from "react"
+
 import EstilosGlobais from "./componentes/EstilosGlobais"
 import Cabecalho from "./componentes/Cabecalho"
 import BarraLateral from "./componentes/BarraLateral"
@@ -6,7 +8,6 @@ import Banner from "./componentes/Banner"
 import bannerBackground from './assets/banner.png'
 import Galeria from "./componentes/Galeria"
 import fotos from "./fotos.json"
-import { useState } from "react"
 import ModalZoom from "./componentes/ModalZoom"
 import Rodape from "./componentes/Rodape"
 
@@ -33,6 +34,17 @@ const ConteudoGaleria = styled.section`
 function App() {
   const [fotosDaGaleria, setFotosDaGaleria] = useState(fotos);
   const [fotoSelecionada, setFotoSelecionada] = useState(null);
+  const [filtro, setFiltro] = useState('');
+  const [tag, setTag] = useState(0);
+
+  useEffect(() => {
+    const fotosFiltradas = fotos.filter(foto => {
+      const filtroPorTag = !tag || foto.tagId === tag;
+      const filtroPorTitulo = !filtro || foto.titulo.toLowerCase().includes(filtro.toLowerCase());
+      return filtroPorTag && filtroPorTitulo
+    })
+    setFotosDaGaleria(fotosFiltradas)
+  }, [filtro, tag])
   
   const aoAlternarFavorito = (foto) => {
     //transforma o array de fotos em outra coisa, retornando a foto da galeria como um novo objeto com a foto escolhida e cria uma nova propriedade chamada favorita, compara se o id de favorito é o mesmo do id e então atribui o oposto do que ela tem (se é favorita, desfavorita), se não é o que queremos, deixa como está
@@ -53,7 +65,10 @@ function App() {
     <FundoGradiente>
       <EstilosGlobais />
       <AppContainer>
-        <Cabecalho />
+        <Cabecalho 
+          filtro={filtro}
+          setFiltro={setFiltro}
+        />
           <MainContainer>
             <BarraLateral />
             <ConteudoGaleria>
@@ -64,15 +79,17 @@ function App() {
               <Galeria 
                 aoFotoSelecionada={foto => setFotoSelecionada(foto)} 
                 aoAlternarFavorito={aoAlternarFavorito}
-                fotos={fotosDaGaleria}/>
+                fotos={fotosDaGaleria}
+                setTag={setTag}
+              />
             </ConteudoGaleria>           
           </MainContainer>  
       </AppContainer>
-      <Rodape /> 
       <ModalZoom 
         foto={fotoSelecionada} 
         aoFechar={() => setFotoSelecionada(null)}
         aoAlternarFavorito={aoAlternarFavorito}/>     
+      <Rodape /> 
     </FundoGradiente>
   )
 }
